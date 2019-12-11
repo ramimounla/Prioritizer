@@ -4,6 +4,8 @@ type DataSet = ComponentFramework.PropertyTypes.DataSet;
 
 export class Prioritizer implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
+	private _container: HTMLDivElement;
+	
 	/**
 	 * Empty constructor.
 	 */
@@ -23,6 +25,10 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 	public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container:HTMLDivElement)
 	{
 		// Add control initialization code
+		this._container = document.createElement("div");
+
+		
+		container.appendChild(this._container);
 	}
 
 
