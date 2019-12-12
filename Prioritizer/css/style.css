@@ -1,3 +1,21 @@
-div {
-    
+.header {
+    background: black;
+    color: white;
+    padding: 5px;
+}
+
+
+
+.row{
+    background: azure;
+    padding: 5px;
+}
+
+.row-alt{
+    background: white;
+    padding: 5px;
+}
+
+.element, .span-element{
+    padding: 5px;
 }

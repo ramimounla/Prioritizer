@@ -1,5 +1,6 @@
 import {IInputs, IOutputs} from "./generated/ManifestTypes";
 import DataSetInterfaces = ComponentFramework.PropertyHelper.DataSetApi;
+import { bool } from "prop-types";
 type DataSet = ComponentFramework.PropertyTypes.DataSet;
 
 export class Prioritizer implements ComponentFramework.StandardControl<IInputs, IOutputs> {
@@ -39,19 +40,8 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 	{
 		// Add control initialization code
 		this._container = document.createElement("div");
+		this._container.className = "table-like";
 		this._container.innerText = "Sample";
-		
-
-		// this.contextObj = context;
-        // // Need to track container resize so that control could get the available width. The available height won't be provided even this is true
-        // context.mode.trackContainerResize(true);
-        // // Create main table container div. 
-        // this.mainContainer = document.createElement("div");
-        // this.mainContainer.classList.add("SimpleTable_MainContainer_Style");
-	 
-		// //this.mainContainer.appendChild(this.loadPageButton);
-        // container.appendChild(this.mainContainer);
-	
 
 		container.appendChild(this._container);
 	}
@@ -65,14 +55,18 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 	{
 		// Add code to update control view
 
+		var alt: boolean;
+
 		if (!context.parameters.recordSet.loading) {
 			
 			this._container.innerHTML = "";
 			var recordSet = context.parameters.recordSet;
 
 			var headers = <HTMLDivElement>document.createElement("div");
+			headers.className = "header";
 			context.parameters.recordSet.columns.forEach(column => {
 				var span = <HTMLSpanElement>document.createElement("span");
+				span.className = "span-element";
 				span.innerText = column.displayName;
 				headers.appendChild(span);
 			});
@@ -81,8 +75,11 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 			recordSet.sortedRecordIds.forEach(recordId => {
 				var recordDiv = <HTMLDivElement>document.createElement("div");
+				recordDiv.className = alt ? "row" : "row-alt";
+				alt = !alt;
 				context.parameters.recordSet.columns.forEach(column => {
 					var span = <HTMLSpanElement>document.createElement("span");
+					span.className = "element";
 					span.innerText = <string>recordSet.records[recordId].getValue(column.name);
 					recordDiv.appendChild(span);
 				});	
