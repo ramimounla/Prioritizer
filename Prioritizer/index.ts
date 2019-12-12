@@ -70,18 +70,23 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 			this._container.innerHTML = "";
 			var recordSet = context.parameters.recordSet;
 
+			var headers = <HTMLDivElement>document.createElement("div");
 			context.parameters.recordSet.columns.forEach(column => {
-				var div = <HTMLDivElement>document.createElement("div");
-				div.innerText = column.displayName;
-				this._container.appendChild(div);
+				var span = <HTMLSpanElement>document.createElement("span");
+				span.innerText = column.displayName;
+				headers.appendChild(span);
 			});
+			this._container.appendChild(headers);
+
 
 			recordSet.sortedRecordIds.forEach(recordId => {
+				var recordDiv = <HTMLDivElement>document.createElement("div");
 				context.parameters.recordSet.columns.forEach(column => {
-					var div = <HTMLDivElement>document.createElement("div");
-					div.innerText = <string>recordSet.records[recordId].getValue(column.name);
-					this._container.appendChild(div);
-				});				
+					var span = <HTMLSpanElement>document.createElement("span");
+					span.innerText = <string>recordSet.records[recordId].getValue(column.name);
+					recordDiv.appendChild(span);
+				});	
+				this._container.appendChild(recordDiv);	
 			});
 		}
 
