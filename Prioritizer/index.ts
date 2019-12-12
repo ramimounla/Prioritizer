@@ -40,8 +40,11 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 	{
 		// Add control initialization code
 		this._container = document.createElement("div");
-		this._container.className = "table-like";
+		this._container.className = "table-like sortable";
 		this._container.innerText = "Sample";
+		this._container.id = "sortable";
+
+		// (<any>$('.sortable')).sortable();
 
 		container.appendChild(this._container);
 	}
