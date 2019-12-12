@@ -6,6 +6,19 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 	private _container: HTMLDivElement;
 	
+	// // Cached context object for the latest updateView
+    // private contextObj: ComponentFramework.Context<IInputs>;
+    // // Div element created as part of this control's main container
+    // private mainContainer: HTMLDivElement;
+    // // Table element created as part of this control's table
+    // private dataTable: HTMLTableElement;
+    // // Button element created as part of this control
+    // private loadPageButton: HTMLButtonElement;
+	
+	// private optionsMapping: string;
+	// private yesOption: string | null;
+	// private noOption: string | null;
+
 	/**
 	 * Empty constructor.
 	 */
@@ -26,8 +39,20 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 	{
 		// Add control initialization code
 		this._container = document.createElement("div");
-
+		this._container.innerText = "Sample";
 		
+
+		// this.contextObj = context;
+        // // Need to track container resize so that control could get the available width. The available height won't be provided even this is true
+        // context.mode.trackContainerResize(true);
+        // // Create main table container div. 
+        // this.mainContainer = document.createElement("div");
+        // this.mainContainer.classList.add("SimpleTable_MainContainer_Style");
+	 
+		// //this.mainContainer.appendChild(this.loadPageButton);
+        // container.appendChild(this.mainContainer);
+	
+
 		container.appendChild(this._container);
 	}
 
@@ -39,7 +64,61 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 	public updateView(context: ComponentFramework.Context<IInputs>): void
 	{
 		// Add code to update control view
-	}
+
+		if (!context.parameters.recordSet.loading) {
+			
+			this._container.innerHTML = "";
+			var recordSet = context.parameters.recordSet;
+
+			context.parameters.recordSet.columns.forEach(column => {
+				var div = <HTMLDivElement>document.createElement("div");
+				div.innerText = column.displayName;
+				this._container.appendChild(div);
+			});
+
+			recordSet.sortedRecordIds.forEach(recordId => {
+				context.parameters.recordSet.columns.forEach(column => {
+					var div = <HTMLDivElement>document.createElement("div");
+					div.innerText = <string>recordSet.records[recordId].getValue(column.name);
+					this._container.appendChild(div);
+				});				
+			});
+		}
+
+		// this.contextObj = context;
+		// // this.ResetOptionMappings(context);
+        // //this.toggleLoadMoreButtonWhenNeeded(context.parameters.tableGrid);
+        // if (!context.parameters.recordSet.loading) {
+        //     // Get sorted columns on View
+        //     let columnsOnView = this.getSortedColumnsOnView(context);
+        //     if (!columnsOnView || columnsOnView.length === 0) {
+        //         return;
+        //     }
+        //     let columnWidthDistribution = this.getColumnWidthDistribution(context, columnsOnView);
+        //     while (this.dataTable.firstChild) {
+        //         this.dataTable.removeChild(this.dataTable.firstChild);
+        //     }
+        //     this.dataTable.appendChild(this.createTableHeader(columnsOnView, columnWidthDistribution));
+        //     this.dataTable.appendChild(this.createTableBody(columnsOnView, columnWidthDistribution, context.parameters.tableGrid));
+        //     this.dataTable.parentElement!.style.height = window.innerHeight - this.dataTable.offsetTop - 70 + "px";
+		// }
+		
+
+		// if (!context.parameters.tableGrid.columns) {
+        //     return [];
+        // }
+        // let columns = context.parameters.tableGrid.columns
+        //     .filter(function (columnItem: DataSetInterfaces.Column) {
+        //         // some column are supplementary and their order is not > 0
+        //         return columnItem.order >= 0
+        //     }
+        //     );
+        // // Sort those columns so that they will be rendered in order
+        // columns.sort(function (a: DataSetInterfaces.Column, b: DataSetInterfaces.Column) {
+        //     return a.order - b.order;
+        // });
+        // return columns;
+    }
 
 	/** 
 	 * It is called by the framework prior to a control receiving new data. 
