@@ -55,8 +55,6 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 	{
 		// Add code to update control view
 
-		var alt: boolean;
-
 		if (!context.parameters.recordSet.loading) {
 			
 			this._container.innerHTML = "";
@@ -66,7 +64,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 			headers.className = "header";
 			context.parameters.recordSet.columns.forEach(column => {
 				var span = <HTMLSpanElement>document.createElement("span");
-				span.className = "span-element";
+				span.className = "element";
 				span.innerText = column.displayName;
 				headers.appendChild(span);
 			});
@@ -75,8 +73,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 			recordSet.sortedRecordIds.forEach(recordId => {
 				var recordDiv = <HTMLDivElement>document.createElement("div");
-				recordDiv.className = alt ? "row" : "row-alt";
-				alt = !alt;
+				recordDiv.className = "row";
 				context.parameters.recordSet.columns.forEach(column => {
 					var span = <HTMLSpanElement>document.createElement("span");
 					span.className = "element";

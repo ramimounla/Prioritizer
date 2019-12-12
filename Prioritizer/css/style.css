@@ -2,20 +2,28 @@
     background: black;
     color: white;
     padding: 5px;
+    display: table-row;
 }
-
-
 
 .row{
+    padding: 5px;
+    display: table-row;
+}
+
+.row:nth-child(even){
     background: azure;
-    padding: 5px;
 }
 
-.row-alt{
+.row:nth-child(odd){
     background: white;
-    padding: 5px;
 }
 
-.element, .span-element{
+.element{
     padding: 5px;
+    display: table-cell;
+}
+
+.table-like{
+    display: table;
+     width: 100%;
 }
