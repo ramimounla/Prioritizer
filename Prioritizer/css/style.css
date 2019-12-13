@@ -27,3 +27,7 @@
     display: table;
      width: 100%;
 }
+
+.ui-sortable-helper{
+    cursor: grabbing;
+}
