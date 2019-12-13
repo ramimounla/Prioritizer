@@ -86,40 +86,6 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 				this._container.appendChild(recordDiv);	
 			});
 		}
-
-		// this.contextObj = context;
-		// // this.ResetOptionMappings(context);
-        // //this.toggleLoadMoreButtonWhenNeeded(context.parameters.tableGrid);
-        // if (!context.parameters.recordSet.loading) {
-        //     // Get sorted columns on View
-        //     let columnsOnView = this.getSortedColumnsOnView(context);
-        //     if (!columnsOnView || columnsOnView.length === 0) {
-        //         return;
-        //     }
-        //     let columnWidthDistribution = this.getColumnWidthDistribution(context, columnsOnView);
-        //     while (this.dataTable.firstChild) {
-        //         this.dataTable.removeChild(this.dataTable.firstChild);
-        //     }
-        //     this.dataTable.appendChild(this.createTableHeader(columnsOnView, columnWidthDistribution));
-        //     this.dataTable.appendChild(this.createTableBody(columnsOnView, columnWidthDistribution, context.parameters.tableGrid));
-        //     this.dataTable.parentElement!.style.height = window.innerHeight - this.dataTable.offsetTop - 70 + "px";
-		// }
-		
-
-		// if (!context.parameters.tableGrid.columns) {
-        //     return [];
-        // }
-        // let columns = context.parameters.tableGrid.columns
-        //     .filter(function (columnItem: DataSetInterfaces.Column) {
-        //         // some column are supplementary and their order is not > 0
-        //         return columnItem.order >= 0
-        //     }
-        //     );
-        // // Sort those columns so that they will be rendered in order
-        // columns.sort(function (a: DataSetInterfaces.Column, b: DataSetInterfaces.Column) {
-        //     return a.order - b.order;
-        // });
-        // return columns;
     }
 
 	/** 
