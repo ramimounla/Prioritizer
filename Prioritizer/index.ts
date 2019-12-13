@@ -45,6 +45,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 		this._container.id = "sortable";
 
 		// (<any>$('.sortable')).sortable();
+        // (<any>$('.sortable')).disableSelection();
 
 		container.appendChild(this._container);
 	}
