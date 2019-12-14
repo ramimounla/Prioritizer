@@ -1,11 +1,9 @@
-.header {
+.header{
     background: black;
     color: white;
-    padding: 5px;
-    display: table-row;
 }
 
-.row{
+.row, .header {
     padding: 5px;
     display: table-row;
 }
@@ -23,7 +21,24 @@
     display: table-cell;
 }
 
+/* .tagdiv{
+    padding: 5px;
+    display: table-cell;
+} */
+
 .table-like{
     display: table;
      width: 100%;
 }
+
+.tags{
+    float: right;
+}
+
+.tag{
+    color: white;
+    padding: 2px;
+    border-radius: 5px;
+    margin: 5px;
+}
+

@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\node_modules\\pcf-scripts",
+    "\\node_modules\\webpack",
+    "\\out\\controls",
+    "\\out\\controls\\Prioritizer",
+    "\\Prioritizer",
+    "\\Prioritizer\\css",
+    "\\Prioritizer\\generated"
+  ],
+  "SelectedNode": "\\Prioritizer\\css\\style.css",
+  "PreviewInSolutionExplorer": false
+}

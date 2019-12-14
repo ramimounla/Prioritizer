@@ -1,21 +1,22 @@
-import {IInputs, IOutputs} from "./generated/ManifestTypes";
+import { IInputs, IOutputs } from "./generated/ManifestTypes";
 import DataSetInterfaces = ComponentFramework.PropertyHelper.DataSetApi;
 import { bool } from "prop-types";
 type DataSet = ComponentFramework.PropertyTypes.DataSet;
+import * as $ from 'jquery';
 
 export class Prioritizer implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
 	private _container: HTMLDivElement;
-	
+
 	// // Cached context object for the latest updateView
-    // private contextObj: ComponentFramework.Context<IInputs>;
-    // // Div element created as part of this control's main container
-    // private mainContainer: HTMLDivElement;
-    // // Table element created as part of this control's table
-    // private dataTable: HTMLTableElement;
-    // // Button element created as part of this control
-    // private loadPageButton: HTMLButtonElement;
-	
+	// private contextObj: ComponentFramework.Context<IInputs>;
+	// // Div element created as part of this control's main container
+	// private mainContainer: HTMLDivElement;
+	// // Table element created as part of this control's table
+	// private dataTable: HTMLTableElement;
+	// // Button element created as part of this control
+	// private loadPageButton: HTMLButtonElement;
+
 	// private optionsMapping: string;
 	// private yesOption: string | null;
 	// private noOption: string | null;
@@ -23,8 +24,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 	/**
 	 * Empty constructor.
 	 */
-	constructor()
-	{
+	constructor() {
 
 	}
 
@@ -36,15 +36,14 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 	 * @param state A piece of data that persists in one session for a single user. Can be set at any point in a controls life cycle by calling 'setControlState' in the Mode interface.
 	 * @param container If a control is marked control-type='standard', it will receive an empty div element within which it can render its content.
 	 */
-	public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container:HTMLDivElement)
-	{
+	public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container: HTMLDivElement) {
 		// Add control initialization code
 		this._container = document.createElement("div");
 		this._container.className = "table-like sortable";
 		this._container.innerText = "Sample";
 		this._container.id = "sortable";
 
-		// (<any>$('.sortable')).sortable();
+		//(<any>$('.sortable')).sortable();
 
 		container.appendChild(this._container);
 	}
@@ -54,12 +53,11 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 	 * Called when any value in the property bag has changed. This includes field values, data-sets, global values such as container height and width, offline status, control metadata values such as label, visible, etc.
 	 * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
 	 */
-	public updateView(context: ComponentFramework.Context<IInputs>): void
-	{
+	public updateView(context: ComponentFramework.Context<IInputs>): void {
 		// Add code to update control view
 
 		if (!context.parameters.recordSet.loading) {
-			
+
 			this._container.innerHTML = "";
 			var recordSet = context.parameters.recordSet;
 
@@ -78,56 +76,49 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 				var recordDiv = <HTMLDivElement>document.createElement("div");
 				recordDiv.className = "row";
 				context.parameters.recordSet.columns.forEach(column => {
-					var span = <HTMLSpanElement>document.createElement("span");
-					span.className = "element";
-					span.innerText = <string>recordSet.records[recordId].getValue(column.name);
-					recordDiv.appendChild(span);
-				});	
-				this._container.appendChild(recordDiv);	
+
+					if (column.name == "tag") {
+						var tagDiv = <HTMLSpanElement>document.createElement("div");
+						tagDiv.className = "tags";
+						var tags = (<string>recordSet.records[recordId].getValue(column.name)).split(";");
+
+						tags.forEach(tag => {
+							var tagSpan = <HTMLSpanElement>document.createElement("span");
+							tagSpan.className = "tag";
+							tagSpan.innerText = tag;
+							
+							if(tag == "urgent")
+								tagSpan.style.background="#E51400";
+							if(tag == "blocked")
+								tagSpan.style.background="#FF9642";
+							if(tag == "green")
+								tagSpan.style.background="#668D3C";
+							if(tag == "stage gate")
+								tagSpan.style.background="#007996";
+							
+							tagDiv.appendChild(tagSpan);
+						});
+						
+						recordDiv.appendChild(tagDiv);
+					}
+					else {
+						var span = <HTMLSpanElement>document.createElement("span");
+						span.className = "element";
+						span.innerText = <string>recordSet.records[recordId].getValue(column.name);
+						recordDiv.appendChild(span);
+					}
+
+				});
+				this._container.appendChild(recordDiv);
 			});
 		}
-
-		// this.contextObj = context;
-		// // this.ResetOptionMappings(context);
-        // //this.toggleLoadMoreButtonWhenNeeded(context.parameters.tableGrid);
-        // if (!context.parameters.recordSet.loading) {
-        //     // Get sorted columns on View
-        //     let columnsOnView = this.getSortedColumnsOnView(context);
-        //     if (!columnsOnView || columnsOnView.length === 0) {
-        //         return;
-        //     }
-        //     let columnWidthDistribution = this.getColumnWidthDistribution(context, columnsOnView);
-        //     while (this.dataTable.firstChild) {
-        //         this.dataTable.removeChild(this.dataTable.firstChild);
-        //     }
-        //     this.dataTable.appendChild(this.createTableHeader(columnsOnView, columnWidthDistribution));
-        //     this.dataTable.appendChild(this.createTableBody(columnsOnView, columnWidthDistribution, context.parameters.tableGrid));
-        //     this.dataTable.parentElement!.style.height = window.innerHeight - this.dataTable.offsetTop - 70 + "px";
-		// }
-		
-
-		// if (!context.parameters.tableGrid.columns) {
-        //     return [];
-        // }
-        // let columns = context.parameters.tableGrid.columns
-        //     .filter(function (columnItem: DataSetInterfaces.Column) {
-        //         // some column are supplementary and their order is not > 0
-        //         return columnItem.order >= 0
-        //     }
-        //     );
-        // // Sort those columns so that they will be rendered in order
-        // columns.sort(function (a: DataSetInterfaces.Column, b: DataSetInterfaces.Column) {
-        //     return a.order - b.order;
-        // });
-        // return columns;
-    }
+	}
 
 	/** 
 	 * It is called by the framework prior to a control receiving new data. 
 	 * @returns an object based on nomenclature defined in manifest, expecting object[s] for property marked as “bound” or “output”
 	 */
-	public getOutputs(): IOutputs
-	{
+	public getOutputs(): IOutputs {
 		return {};
 	}
 
@@ -135,8 +126,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 	 * Called when the control is to be removed from the DOM tree. Controls should use this call for cleanup.
 	 * i.e. cancelling any pending remote calls, removing listeners, etc.
 	 */
-	public destroy(): void
-	{
+	public destroy(): void {
 		// Add code to cleanup control if necessary
 	}
 
