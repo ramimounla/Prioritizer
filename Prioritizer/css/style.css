@@ -1,15 +1,26 @@
+html{
+    font-family: 'Segoe UI';
+    font-size: 14px;
+    color: darkslategray;
+}
+
 .header{
-    background: black;
-    color: white;
+    
+    color: #6E6F77;
+}
+
+.ui-sortable-helper{
+    cursor: grabbing;
 }
 
 .row, .header {
-    padding: 5px;
+    height: 35px;    
     display: table-row;
+    border: 2px solid gray;
 }
 
 .row:nth-child(even){
-    background: azure;
+    background:#EEE;
 }
 
 .row:nth-child(odd){
@@ -21,18 +32,14 @@
     display: table-cell;
 }
 
-/* .tagdiv{
-    padding: 5px;
-    display: table-cell;
-} */
-
 .table-like{
     display: table;
      width: 100%;
 }
 
 .tags{
-    float: right;
+    float: left;
+    margin-top: 10px;
 }
 
 .tag{
