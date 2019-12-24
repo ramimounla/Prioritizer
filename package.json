@@ -9,12 +9,11 @@
     "start": "pcf-scripts start"
   },
   "dependencies": {
-    "@types/jquery-sortable": "^0.9.29",
+    "@types/jquery": "^3.3.31",
     "@types/node": "^10.12.18",
     "@types/powerapps-component-framework": "^1.2.0"
   },
   "devDependencies": {
-    "@types/jquery": "^3.3.31",
     "pcf-scripts": "^1",
     "pcf-start": "^1"
   }

@@ -43,7 +43,6 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 		this._container.innerText = "Sample";
 		this._container.id = "sortable";
 
-		//(<any>$('.sortable')).sortable();
 
 		container.appendChild(this._container);
 	}
@@ -86,19 +85,19 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 							var tagSpan = <HTMLSpanElement>document.createElement("span");
 							tagSpan.className = "tag";
 							tagSpan.innerText = tag;
-							
-							if(tag == "urgent")
-								tagSpan.style.background="#E51400";
-							if(tag == "blocked")
-								tagSpan.style.background="#FF9642";
-							if(tag == "green")
-								tagSpan.style.background="#668D3C";
-							if(tag == "stage gate")
-								tagSpan.style.background="#007996";
-							
+
+							if (tag == "urgent")
+								tagSpan.style.background = "#E51400";
+							if (tag == "blocked")
+								tagSpan.style.background = "#FF9642";
+							if (tag == "green")
+								tagSpan.style.background = "#668D3C";
+							if (tag == "stage gate")
+								tagSpan.style.background = "#007996";
+
 							tagDiv.appendChild(tagSpan);
 						});
-						
+
 						recordDiv.appendChild(tagDiv);
 					}
 					else {
@@ -111,6 +110,9 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 				});
 				this._container.appendChild(recordDiv);
 			});
+
+			
+			($('.sortable')).css("Color","Lime");
 		}
 	}
 
