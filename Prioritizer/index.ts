@@ -3,6 +3,7 @@ import DataSetInterfaces = ComponentFramework.PropertyHelper.DataSetApi;
 import { bool } from "prop-types";
 type DataSet = ComponentFramework.PropertyTypes.DataSet;
 import * as $ from 'jquery';
+import "jquery-ui";
 
 export class Prioritizer implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
@@ -112,6 +113,8 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 			});
 			
 			($('.sortable')).css("color","Blue");
+			(<any>$('.sortable')).sortable();
+			(<any>$('.sortable')).disableSelection();			
 		}
 	}
 
