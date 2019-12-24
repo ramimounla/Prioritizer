@@ -110,9 +110,8 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 				});
 				this._container.appendChild(recordDiv);
 			});
-
 			
-			($('.sortable')).css("Color","Lime");
+			($('.sortable')).css("color","Blue");
 		}
 	}
 
