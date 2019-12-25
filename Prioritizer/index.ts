@@ -1,9 +1,9 @@
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
+import "./js/jquery-ui.js";
 import DataSetInterfaces = ComponentFramework.PropertyHelper.DataSetApi;
 import { bool } from "prop-types";
 type DataSet = ComponentFramework.PropertyTypes.DataSet;
 import * as $ from 'jquery';
-import "jquery-ui";
 
 export class Prioritizer implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
