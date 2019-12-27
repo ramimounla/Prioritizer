@@ -1,13 +1,13 @@
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
 import DataSetInterfaces = ComponentFramework.PropertyHelper.DataSetApi;
-import { bool } from "prop-types";
 type DataSet = ComponentFramework.PropertyTypes.DataSet;
 import * as $ from 'jquery';
 
 export class Prioritizer implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
 	private _container: HTMLDivElement;
-
+	private _select: HTMLDivElement;
+	private _uniqueTags: string[];
 	// // Cached context object for the latest updateView
 	// private contextObj: ComponentFramework.Context<IInputs>;
 	// // Div element created as part of this control's main container
@@ -45,6 +45,24 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 
 		container.appendChild(this._container);
+
+		this._select = document.createElement("div");
+		this._select.id = "select";
+		container.appendChild(this._select);
+
+		// this._multiSelect = new SlimSelect({
+		// 	select: '#select',
+		// 	placeholder: 'Filter by tag',
+		// 	showSearch: false, // shows search field
+		// 	searchText: 'Sorry couldnt find tag'
+		// });
+
+		// this._multiSelect.setData([
+		// 	{text: 'urgent'},
+		// 	{text: 'blocked'}
+		//   ])
+
+
 	}
 
 
@@ -59,6 +77,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 			this._container.innerHTML = "";
 			var recordSet = context.parameters.recordSet;
+			let allTags: string[] = [];
 
 			var headers = <HTMLDivElement>document.createElement("div");
 			headers.className = "header";
@@ -79,9 +98,10 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 					if (column.name == "tag") {
 						var tagDiv = <HTMLSpanElement>document.createElement("div");
 						tagDiv.className = "tags";
-						var tags = (<string>recordSet.records[recordId].getValue(column.name)).split(";");
+						var recordTags = (<string>recordSet.records[recordId].getValue(column.name)).split(";");
+						allTags = allTags.concat(recordTags);
 
-						tags.forEach(tag => {
+						recordTags.forEach(tag => {
 							var tagSpan = <HTMLSpanElement>document.createElement("span");
 							tagSpan.className = "tag";
 							tagSpan.innerText = tag;
@@ -110,10 +130,14 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 				});
 				this._container.appendChild(recordDiv);
 			});
-			
-			($('.sortable')).css("color","Blue");
+
+			this._uniqueTags = allTags.filter(
+				(thing, i, arr) => arr.findIndex(t => t === thing) === i && thing !== ""
+			  );
+
+			($('.sortable')).css("color", "Blue");
 			(<any>$('.sortable')).sortable();
-			(<any>$('.sortable')).disableSelection();			
+			(<any>$('.sortable')).disableSelection();
 		}
 	}
 
