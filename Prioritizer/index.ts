@@ -129,9 +129,37 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 			});
 
 			($('.sortable')).css("color", "Blue");
-			(<any>$('.sortable')).sortable();
+			(<any>$('.sortable')).sortable({
+				stop: function (event:Event, ui:Object) {
+					 console.trace("done again");
+					 let order = 1;
+					 
+					 Array.from((<HTMLDivElement>event.target).children).forEach(element => {
+
+					 	if (element.classList.contains('header'))
+					 		return;
+
+					 	(<HTMLSpanElement>element.firstChild).innerText = (order++).toString();
+					 });
+
+				}
+			});
 			(<any>$('.sortable')).disableSelection();
 		}
+	}
+
+	private reorderElements(): void {
+
+		console.trace("sorting done");
+		// let order = 1;
+
+		// Array.from(this._container.children).forEach(element => {
+
+		// 	if (element.className === 'header')
+		// 		return;
+
+		// 	(<HTMLSpanElement>element.firstChild).innerText = (order++).toString();
+		// });
 	}
 
 	private filterList(): void {
