@@ -53,6 +53,9 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 		container.appendChild(this._container);
 	}
 
+	private sanitizeNameToCss(name:string):string{
+		return name.toLowerCase().replace(' ','-');
+	}
 
 	/**
 	 * Called when any value in the property bag has changed. This includes field values, data-sets, global values such as container height and width, offline status, control metadata values such as label, visible, etc.
@@ -71,7 +74,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 			headers.className = "header";
 			context.parameters.recordSet.columns.forEach(column => {
 				var span = <HTMLSpanElement>document.createElement("span");
-				span.className = "element";
+				span.className = "element " + this.sanitizeNameToCss(column.displayName);
 				span.innerText = column.displayName;
 				headers.appendChild(span);
 			});
@@ -85,7 +88,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 					if (column.name == "tag") {
 						var tagDiv = <HTMLSpanElement>document.createElement("div");
-						tagDiv.className = "tags";
+						tagDiv.className = "tags nonsortable";
 						var recordTags = (<string>recordSet.records[recordId].getValue(column.name)).split(";");
 						allTags = allTags.concat(recordTags);
 
@@ -100,7 +103,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 					}
 					else {
 						var span = <HTMLSpanElement>document.createElement("span");
-						span.className = "element";
+						span.className = "element " + this.sanitizeNameToCss(column.name);;
 						span.innerText = <string>recordSet.records[recordId].getValue(column.name);
 						recordDiv.appendChild(span);
 					}
@@ -146,20 +149,6 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 			});
 			(<any>$('.sortable')).disableSelection();
 		}
-	}
-
-	private reorderElements(): void {
-
-		console.trace("sorting done");
-		// let order = 1;
-
-		// Array.from(this._container.children).forEach(element => {
-
-		// 	if (element.className === 'header')
-		// 		return;
-
-		// 	(<HTMLSpanElement>element.firstChild).innerText = (order++).toString();
-		// });
 	}
 
 	private filterList(): void {
