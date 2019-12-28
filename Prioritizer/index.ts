@@ -2,12 +2,14 @@ import { IInputs, IOutputs } from "./generated/ManifestTypes";
 import DataSetInterfaces = ComponentFramework.PropertyHelper.DataSetApi;
 type DataSet = ComponentFramework.PropertyTypes.DataSet;
 import * as $ from 'jquery';
+import './js/jquery-ui'
 
 export class Prioritizer implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
 	private _container: HTMLDivElement;
 	private _select: HTMLDivElement;
-	private _uniqueTags: string[];
+	private _selectedTags: string[] = [];
+
 	// // Cached context object for the latest updateView
 	// private contextObj: ComponentFramework.Context<IInputs>;
 	// // Div element created as part of this control's main container
@@ -37,32 +39,18 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 	 * @param container If a control is marked control-type='standard', it will receive an empty div element within which it can render its content.
 	 */
 	public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container: HTMLDivElement) {
+		this._select = document.createElement("div");
+		this._select.id = "select";
+		this._select.className = "selectable-tags";
+		container.appendChild(this._select);
+
 		// Add control initialization code
 		this._container = document.createElement("div");
 		this._container.className = "table-like sortable";
 		this._container.innerText = "Sample";
 		this._container.id = "sortable";
 
-
 		container.appendChild(this._container);
-
-		this._select = document.createElement("div");
-		this._select.id = "select";
-		container.appendChild(this._select);
-
-		// this._multiSelect = new SlimSelect({
-		// 	select: '#select',
-		// 	placeholder: 'Filter by tag',
-		// 	showSearch: false, // shows search field
-		// 	searchText: 'Sorry couldnt find tag'
-		// });
-
-		// this._multiSelect.setData([
-		// 	{text: 'urgent'},
-		// 	{text: 'blocked'}
-		//   ])
-
-
 	}
 
 
@@ -103,18 +91,8 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 						recordTags.forEach(tag => {
 							var tagSpan = <HTMLSpanElement>document.createElement("span");
-							tagSpan.className = "tag";
+							tagSpan.className = "tag " + tag.toLowerCase().replace(' ', '-');
 							tagSpan.innerText = tag;
-
-							if (tag == "urgent")
-								tagSpan.style.background = "#E51400";
-							if (tag == "blocked")
-								tagSpan.style.background = "#FF9642";
-							if (tag == "green")
-								tagSpan.style.background = "#668D3C";
-							if (tag == "stage gate")
-								tagSpan.style.background = "#007996";
-
 							tagDiv.appendChild(tagSpan);
 						});
 
@@ -131,14 +109,33 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 				this._container.appendChild(recordDiv);
 			});
 
-			this._uniqueTags = allTags.filter(
+			let uniqueTags = allTags.filter(
 				(thing, i, arr) => arr.findIndex(t => t === thing) === i && thing !== ""
-			  );
+			);
+
+			uniqueTags.forEach(tag => {
+				var tagSpan = <HTMLSpanElement>document.createElement("span");
+				tagSpan.className = "selectable-tag unselected " + tag.toLowerCase().replace(' ', '-');
+				tagSpan.innerText = tag;
+
+				tagSpan.addEventListener("click", (e: Event) => {
+					let clickedElement = <HTMLSpanElement>e.srcElement;
+					clickedElement.classList.contains('unselected') ? clickedElement.classList.remove('unselected') : clickedElement.classList.add('unselected');
+					clickedElement.classList.contains('unselected') ? this._selectedTags.splice(this._selectedTags.indexOf(clickedElement.innerText), 1) : this._selectedTags.push(clickedElement.innerText);
+					this.filterList();					
+				});
+
+				this._select.appendChild(tagSpan);
+			});
 
 			($('.sortable')).css("color", "Blue");
 			(<any>$('.sortable')).sortable();
 			(<any>$('.sortable')).disableSelection();
 		}
+	}
+
+	private filterList():void {
+
 	}
 
 	/** 

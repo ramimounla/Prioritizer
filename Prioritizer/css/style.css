@@ -37,15 +37,38 @@ html{
      width: 100%;
 }
 
-.tags{
+.selectable-tags, .tags{
     float: left;
     margin-top: 10px;
 }
 
-.tag{
+.selectable-tag, .tag{
     color: white;
     padding: 2px;
     border-radius: 5px;
     margin: 5px;
+}
+.selectable-tag{
+    cursor: pointer;
+}
+
+.urgent{
+    background-color: #E51400;
+}
+
+.blocked{
+    background-color: #FF9642;
+}
+
+.green{
+    background-color: #668D3C;
+}
+
+.stage-gate{
+    background-color: #007996;
+}
+
+.unselected{
+    background-color: darkgray;
 }
 
