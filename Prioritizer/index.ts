@@ -53,8 +53,8 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 		container.appendChild(this._container);
 	}
 
-	private sanitizeNameToCss(name:string):string{
-		return name.toLowerCase().replace(' ','-');
+	private sanitizeNameToCss(name: string): string {
+		return name.toLowerCase().replace(' ', '-');
 	}
 
 	/**
@@ -74,7 +74,30 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 			headers.className = "header";
 			context.parameters.recordSet.columns.forEach(column => {
 				var span = <HTMLSpanElement>document.createElement("span");
-				span.className = "element " + this.sanitizeNameToCss(column.displayName);
+
+				//Unless it's a tag header, add a sort class to the header
+				if(column.displayName !== 'tag'){
+					let sanitizedName = this.sanitizeNameToCss(column.displayName);
+					span.className = "element sort " + sanitizedName;
+					span.addEventListener("click", (ev:MouseEvent) => {
+						console.trace("Sort " + (<HTMLSpanElement>ev.target).innerText);
+
+						
+						let reOrderedDivs = Array.from(this._container.getElementsByClassName('row')).sort( (a,b) => { return $(a).find("."+sanitizedName).text().localeCompare($(b).find("."+sanitizedName).text()) } );
+
+						console.trace('Check the new order');
+
+						// $('#alphBnt').on('click', function () {
+						// 	var alphabeticallyOrderedDivs = $divs.sort(function (a, b) {
+						// 		return $(a).find("h1").text() > $(b).find("h1").text();
+						// 	});
+						// 	$("#container").html(alphabeticallyOrderedDivs);
+						// });
+
+					});
+				}
+				
+
 				span.innerText = column.displayName;
 				headers.appendChild(span);
 			});
@@ -88,7 +111,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 					if (column.name == "tag") {
 						var tagDiv = <HTMLSpanElement>document.createElement("div");
-						tagDiv.className = "tags nonsortable";
+						tagDiv.className = "tags";
 						var recordTags = (<string>recordSet.records[recordId].getValue(column.name)).split(";");
 						allTags = allTags.concat(recordTags);
 
@@ -133,17 +156,17 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 			($('.sortable')).css("color", "Blue");
 			(<any>$('.sortable')).sortable({
-				stop: function (event:Event, ui:Object) {
-					 console.trace("done again");
-					 let order = 1;
-					 
-					 Array.from((<HTMLDivElement>event.target).children).forEach(element => {
+				stop: function (event: Event, ui: Object) {
+					console.trace("done again");
+					let order = 1;
 
-					 	if (element.classList.contains('header'))
-					 		return;
+					Array.from((<HTMLDivElement>event.target).children).forEach(element => {
 
-					 	(<HTMLSpanElement>element.firstChild).innerText = (order++).toString();
-					 });
+						if (element.classList.contains('header'))
+							return;
+
+						(<HTMLSpanElement>element.firstChild).innerText = (order++).toString();
+					});
 
 				}
 			});
