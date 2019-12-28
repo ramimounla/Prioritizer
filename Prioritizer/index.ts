@@ -122,7 +122,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 					let clickedElement = <HTMLSpanElement>e.srcElement;
 					clickedElement.classList.contains('unselected') ? clickedElement.classList.remove('unselected') : clickedElement.classList.add('unselected');
 					clickedElement.classList.contains('unselected') ? this._selectedTags.splice(this._selectedTags.indexOf(clickedElement.innerText), 1) : this._selectedTags.push(clickedElement.innerText);
-					this.filterList();					
+					this.filterList();
 				});
 
 				this._select.appendChild(tagSpan);
@@ -134,8 +134,35 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 		}
 	}
 
-	private filterList():void {
+	private filterList(): void {
 
+		if (this._selectedTags.length === 0) {
+			Array.from(this._container.children).forEach(element => {
+				if (element.className === 'header')
+					return;
+
+				(<HTMLDivElement>element).style.removeProperty("display");
+			});
+			return;
+		}
+		Array.from(this._container.children).forEach(element => {
+
+			if (element.className === 'header')
+				return;
+
+			let tagFound = false;
+			this._selectedTags.forEach(tag => {
+				let sanitizedTag = tag.toLowerCase().replace(' ', '-');
+
+				if (tagFound || element.getElementsByClassName(sanitizedTag).length > 0) {
+					(<HTMLDivElement>element).style.removeProperty("display");
+					tagFound = true;
+					return;
+				}
+			});
+			if (!tagFound)
+				(<HTMLDivElement>element).style.display = 'none';
+		});
 	}
 
 	/** 
