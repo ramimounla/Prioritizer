@@ -82,8 +82,15 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 					span.addEventListener("click", (ev:MouseEvent) => {
 						console.trace("Sort " + (<HTMLSpanElement>ev.target).innerText);
 
-						
+						//TODO add sorting for dates etc.
 						let reOrderedDivs = Array.from(this._container.getElementsByClassName('row')).sort( (a,b) => { return $(a).find("."+sanitizedName).text().localeCompare($(b).find("."+sanitizedName).text()) } );
+
+						//TODO remove old ones
+						reOrderedDivs.forEach(element => { this._container.removeChild(element) } );
+						
+						//TODO add new ones
+						reOrderedDivs.forEach(element => { this._container.appendChild(element) } );
+
 
 						console.trace('Check the new order');
 
