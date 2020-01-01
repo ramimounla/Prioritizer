@@ -117,7 +117,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 				context.parameters.recordSet.columns.forEach(column => {
 
 					if (column.name == "tag") {
-						var tagDiv = <HTMLSpanElement>document.createElement("div");
+						var tagDiv = <HTMLDivElement>document.createElement("div");
 						tagDiv.className = "tags";
 						var recordTags = (<string>recordSet.records[recordId].getValue(column.name)).split(";");
 						allTags = allTags.concat(recordTags);
