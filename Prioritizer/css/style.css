@@ -1,14 +1,19 @@
-html {
+.row, .header, .selectable-tags{
     font-family: 'Segoe UI';
     font-size: 14px;
-    color: #504948;
+    color: #333;
     -webkit-font-smoothing: antialiased;
     font-weight: 400;
 }
 
 .header {
-    color: #504948;
-    font-weight: 600;
+    color: #6E6F77;
+    font-size: 12px;
+}
+
+a.prioritizer-hyperlink, a.prioritizer-hyperlink:visited{
+    color: #045999;
+    text-decoration: none;
 }
 
 .row, .header {
@@ -19,23 +24,22 @@ html {
 
 .row {
     cursor: grab;
-}
-
-.row {
-    cursor: grab;
+    background: white;
+    border-bottom-width: 2px;
+    border-color: #6E6F77;
 }
 
 .row.ui-sortable-helper {
     cursor: grabbing;
 }
 
-.row:nth-child(even) {
+/* .row:nth-child(even) {
     background: #EEE;
 }
 
 .row:nth-child(odd) {
     background: white;
-}
+} */
 
 .element {
     padding: 5px;
@@ -50,7 +54,8 @@ html {
 
 .selectable-tags {
     margin: 10px;
-    float: left;
+    margin-right: 30px;
+    float: right;
 }
 
 .tags {

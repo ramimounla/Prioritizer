@@ -48,7 +48,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 		this._container = document.createElement("div");
 		this._container.className = "table-like sortable";
 		this._container.innerText = "Sample";
-		this._container.id = "sortable";
+		// this._container.id = "sortable";
 
 		container.appendChild(this._container);
 	}
@@ -76,7 +76,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 				var span = <HTMLSpanElement>document.createElement("span");
 
 				//Unless it's a tag header, add a sort class to the header
-				if(column.displayName !== 'tag'){
+				if(column.displayName !== 'Tags'){
 					let sanitizedName = this.sanitizeNameToCss(column.displayName);
 					span.className = "element sort " + sanitizedName;
 					span.addEventListener("click", (ev:MouseEvent) => {
@@ -116,7 +116,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 				recordDiv.className = "row";
 				context.parameters.recordSet.columns.forEach(column => {
 
-					if (column.name == "tag") {
+					if (column.displayName == "Tags") {
 						var tagDiv = <HTMLDivElement>document.createElement("div");
 						tagDiv.className = "tags";
 						var recordTags = (<string>recordSet.records[recordId].getValue(column.name)).split(";");
@@ -131,9 +131,20 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 						recordDiv.appendChild(tagDiv);
 					}
+					else if (column.displayName == "Subject") {
+						var span = <HTMLSpanElement>document.createElement("span");
+						span.className = "element " + this.sanitizeNameToCss(column.displayName);;
+						
+						var hyperlink = document.createElement("a");
+						hyperlink.href = "https://fp02.crm6.dynamics.com/";
+						hyperlink.className = "prioritizer-hyperlink";
+						hyperlink.innerText = <string>recordSet.records[recordId].getValue(column.name);
+						span.appendChild(hyperlink);
+						recordDiv.appendChild(span);
+					}
 					else {
 						var span = <HTMLSpanElement>document.createElement("span");
-						span.className = "element " + this.sanitizeNameToCss(column.name);;
+						span.className = "element " + this.sanitizeNameToCss(column.displayName);;
 						span.innerText = <string>recordSet.records[recordId].getValue(column.name);
 						recordDiv.appendChild(span);
 					}
@@ -162,8 +173,8 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 			});
 
 			(<any>$('.sortable')).sortable({
+				items: 'div[class!=header]' ,
 				stop: function (event: Event, ui: Object) {
-					console.trace("done again");
 					let order = 1;
 
 					Array.from((<HTMLDivElement>event.target).children).forEach(element => {
