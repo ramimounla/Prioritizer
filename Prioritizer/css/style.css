@@ -1,21 +1,32 @@
 html {
     font-family: 'Segoe UI';
     font-size: 14px;
-    color: darkslategray;
+    color: #504948;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 400;
 }
 
 .header {
-    color: #6E6F77;
-}
-
-.ui-sortable-helper {
-    cursor: grabbing;
+    color: #504948;
+    font-weight: 600;
 }
 
 .row, .header {
     height: 35px;
     display: table-row;
     border: 2px solid gray;
+}
+
+.row {
+    cursor: grab;
+}
+
+.row {
+    cursor: grab;
+}
+
+.row.ui-sortable-helper {
+    cursor: grabbing;
 }
 
 .row:nth-child(even) {
@@ -37,7 +48,12 @@ html {
     width: 100%;
 }
 
-.selectable-tags, .tags {
+.selectable-tags {
+    margin: 10px;
+    float: left;
+}
+
+.tags {
     margin-top: 10px;
     display: table-cell;
 }
@@ -75,4 +91,20 @@ html {
 
 .unselected {
     background-color: darkgray;
+}
+
+.priority {
+    width: 50px;
+}
+
+.subject {
+    width: 300px;
+}
+
+.description {
+    width: 500px;
+}
+
+.tags {
+    width: 300px;
 }

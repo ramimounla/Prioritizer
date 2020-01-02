@@ -161,7 +161,6 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 				this._select.appendChild(tagSpan);
 			});
 
-			($('.sortable')).css("color", "Blue");
 			(<any>$('.sortable')).sortable({
 				stop: function (event: Event, ui: Object) {
 					console.trace("done again");
