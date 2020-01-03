@@ -3,6 +3,7 @@ import DataSetInterfaces = ComponentFramework.PropertyHelper.DataSetApi;
 type DataSet = ComponentFramework.PropertyTypes.DataSet;
 import * as $ from 'jquery';
 import './js/jquery-ui'
+import moment = require("moment");
 
 export class Prioritizer implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
@@ -85,10 +86,10 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 						//TODO add sorting for dates etc.
 						let reOrderedDivs = Array.from(this._container.getElementsByClassName('row')).sort( (a,b) => { return $(a).find("."+sanitizedName).text().localeCompare($(b).find("."+sanitizedName).text()) } );
 
-						//TODO remove old ones
+						//Remove old ones
 						reOrderedDivs.forEach(element => { this._container.removeChild(element) } );
 						
-						//TODO add new ones
+						//Add new ones
 						reOrderedDivs.forEach(element => { this._container.appendChild(element) } );
 
 
@@ -140,6 +141,12 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 						hyperlink.className = "prioritizer-hyperlink";
 						hyperlink.innerText = <string>recordSet.records[recordId].getValue(column.name);
 						span.appendChild(hyperlink);
+						recordDiv.appendChild(span);
+					}
+					else if(column.name.toLowerCase().includes("date")){
+						var span = <HTMLSpanElement>document.createElement("span");
+						span.className = "element " + this.sanitizeNameToCss(column.displayName);;
+						span.innerText = moment(<string>recordSet.records[recordId].getValue(column.name), "DD/MM/YYYY H:mm").format("YYYY-MM-DD HH:mm:00");
 						recordDiv.appendChild(span);
 					}
 					else {

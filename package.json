@@ -12,7 +12,8 @@
     "@types/jquery": "^3.3.31",
     "@types/node": "^10.12.18",
     "@types/powerapps-component-framework": "^1.2.0",
-    "jquery": "^3.4.1"
+    "jquery": "^3.4.1",
+    "moment": "^2.24.0"
   },
   "devDependencies": {
     "pcf-scripts": "^1",
