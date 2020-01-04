@@ -146,7 +146,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 					else if(column.name.toLowerCase().includes("date")){
 						var span = <HTMLSpanElement>document.createElement("span");
 						span.className = "element " + this.sanitizeNameToCss(column.displayName);;
-						span.innerText = moment(<string>recordSet.records[recordId].getValue(column.name), "DD/MM/YYYY H:mm").format("YYYY-MM-DD HH:mm:00");
+						span.innerText = moment(<string>recordSet.records[recordId].getValue(column.name), "DD/MM/YYYY H:mm").format("YYYY-MM-DD");
 						recordDiv.appendChild(span);
 					}
 					else {
