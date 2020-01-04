@@ -77,20 +77,20 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 				var span = <HTMLSpanElement>document.createElement("span");
 
 				//Unless it's a tag header, add a sort class to the header
-				if(column.displayName !== 'Tags'){
+				if (column.displayName !== 'Tags') {
 					let sanitizedName = this.sanitizeNameToCss(column.displayName);
 					span.className = "element sort " + sanitizedName;
-					span.addEventListener("click", (ev:MouseEvent) => {
+					span.addEventListener("click", (ev: MouseEvent) => {
 						console.trace("Sort " + (<HTMLSpanElement>ev.target).innerText);
 
-						//TODO add sorting for dates etc.
-						let reOrderedDivs = Array.from(this._container.getElementsByClassName('row')).sort( (a,b) => { return $(a).find("."+sanitizedName).text().localeCompare($(b).find("."+sanitizedName).text()) } );
+						//TODO sort both ways
+						let reOrderedDivs = Array.from(this._container.getElementsByClassName('row')).sort((a, b) => { return $(a).find("." + sanitizedName).text().localeCompare($(b).find("." + sanitizedName).text()) });
 
 						//Remove old ones
-						reOrderedDivs.forEach(element => { this._container.removeChild(element) } );
-						
+						reOrderedDivs.forEach(element => { this._container.removeChild(element) });
+
 						//Add new ones
-						reOrderedDivs.forEach(element => { this._container.appendChild(element) } );
+						reOrderedDivs.forEach(element => { this._container.appendChild(element) });
 
 
 						console.trace('Check the new order');
@@ -104,7 +104,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 					});
 				}
-				
+
 
 				span.innerText = column.displayName;
 				headers.appendChild(span);
@@ -117,7 +117,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 				recordDiv.className = "row";
 				context.parameters.recordSet.columns.forEach(column => {
 
-					if (column.displayName == "Tags") {
+					if (column.displayName == "Tags" && recordSet.records[recordId].getValue(column.name) != null) {
 						var tagDiv = <HTMLDivElement>document.createElement("div");
 						tagDiv.className = "tags";
 						var recordTags = (<string>recordSet.records[recordId].getValue(column.name)).split(";");
@@ -135,7 +135,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 					else if (column.displayName == "Subject") {
 						var span = <HTMLSpanElement>document.createElement("span");
 						span.className = "element " + this.sanitizeNameToCss(column.displayName);;
-						
+
 						var hyperlink = document.createElement("a");
 						hyperlink.href = "https://fp02.crm6.dynamics.com/";
 						hyperlink.className = "prioritizer-hyperlink";
@@ -143,10 +143,11 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 						span.appendChild(hyperlink);
 						recordDiv.appendChild(span);
 					}
-					else if(column.name.toLowerCase().includes("date")){
+					else if (column.displayName.toLowerCase().includes("date")) {
 						var span = <HTMLSpanElement>document.createElement("span");
-						span.className = "element " + this.sanitizeNameToCss(column.displayName);;
-						span.innerText = moment(<string>recordSet.records[recordId].getValue(column.name), "DD/MM/YYYY H:mm").format("YYYY-MM-DD");
+						span.className = "element " + this.sanitizeNameToCss(column.displayName);
+						if (recordSet.records[recordId].getValue(column.name) != null)
+							span.innerText = moment(<string>recordSet.records[recordId].getValue(column.name), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("YYYY-MM-DD");
 						recordDiv.appendChild(span);
 					}
 					else {
@@ -164,6 +165,8 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 				(thing, i, arr) => arr.findIndex(t => t === thing) === i && thing !== ""
 			);
 
+			this._select.innerHTML = '';
+
 			uniqueTags.forEach(tag => {
 				var tagSpan = <HTMLSpanElement>document.createElement("span");
 				tagSpan.className = "selectable-tag unselected " + tag.toLowerCase().replace(' ', '-');
@@ -180,7 +183,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 			});
 
 			(<any>$('.sortable')).sortable({
-				items: 'div[class!=header]' ,
+				items: 'div[class!=header]',
 				stop: function (event: Event, ui: Object) {
 					let order = 1;
 
