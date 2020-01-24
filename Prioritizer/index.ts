@@ -9,7 +9,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 	private _container: HTMLDivElement;
 	private _select: HTMLDivElement;
-	private _selectedTags: string[] = [];
+	// private _selectedTags: string[] = [];
 
 	// // Cached context object for the latest updateView
 	// private contextObj: ComponentFramework.Context<IInputs>;
@@ -76,34 +76,22 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 			context.parameters.recordSet.columns.forEach(column => {
 				var span = <HTMLSpanElement>document.createElement("span");
 
-				//Unless it's a tag header, add a sort class to the header
-				if (column.displayName !== 'Tags') {
-					let sanitizedName = this.sanitizeNameToCss(column.displayName);
-					span.className = "element sort " + sanitizedName;
-					span.addEventListener("click", (ev: MouseEvent) => {
-						console.trace("Sort " + (<HTMLSpanElement>ev.target).innerText);
+				//Add a sort class to the header
+				let sanitizedName = this.sanitizeNameToCss(column.displayName);
+				span.className = "element sort " + sanitizedName;
+				span.addEventListener("click", (ev: MouseEvent) => {
+					console.trace("Sort " + (<HTMLSpanElement>ev.target).innerText);
 
-						//TODO sort both ways
-						let reOrderedDivs = Array.from(this._container.getElementsByClassName('row')).sort((a, b) => { return $(a).find("." + sanitizedName).text().localeCompare($(b).find("." + sanitizedName).text()) });
+					//TODO sort both ways
+					let reOrderedDivs = Array.from(this._container.getElementsByClassName('row')).sort((a, b) => { return $(a).find("." + sanitizedName).text().localeCompare($(b).find("." + sanitizedName).text()) });
 
-						//Remove old ones
-						reOrderedDivs.forEach(element => { this._container.removeChild(element) });
+					//Remove old ones
+					reOrderedDivs.forEach(element => { this._container.removeChild(element) });
 
-						//Add new ones
-						reOrderedDivs.forEach(element => { this._container.appendChild(element) });
+					//Add new ones
+					reOrderedDivs.forEach(element => { this._container.appendChild(element) });
+				});
 
-
-						console.trace('Check the new order');
-
-						// $('#alphBnt').on('click', function () {
-						// 	var alphabeticallyOrderedDivs = $divs.sort(function (a, b) {
-						// 		return $(a).find("h1").text() > $(b).find("h1").text();
-						// 	});
-						// 	$("#container").html(alphabeticallyOrderedDivs);
-						// });
-
-					});
-				}
 
 
 				span.innerText = column.displayName;
@@ -117,81 +105,38 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 				recordDiv.className = "row";
 				context.parameters.recordSet.columns.forEach(column => {
 
-					if (column.displayName == "Tags" && recordSet.records[recordId].getValue(column.name) != null) {
-						var tagDiv = <HTMLDivElement>document.createElement("div");
-						tagDiv.className = "tags";
-						var recordTags = (<string>recordSet.records[recordId].getValue(column.name)).split(";");
-						allTags = allTags.concat(recordTags);
+					var span = <HTMLSpanElement>document.createElement("span");
+					span.className = "element " + this.sanitizeNameToCss(column.displayName);
 
-						recordTags.forEach(tag => {
-							var tagSpan = <HTMLSpanElement>document.createElement("span");
-							tagSpan.className = "tag " + tag.toLowerCase().replace(' ', '-');
-							tagSpan.innerText = tag;
-							tagDiv.appendChild(tagSpan);
-						});
-
-						recordDiv.appendChild(tagDiv);
-					}
-					else if (column.displayName == "Subject") {
-						var span = <HTMLSpanElement>document.createElement("span");
-						span.className = "element " + this.sanitizeNameToCss(column.displayName);;
-
-						var hyperlink = document.createElement("a");
-						hyperlink.href = "https://fp02.crm6.dynamics.com/";
-						hyperlink.className = "prioritizer-hyperlink";
-						hyperlink.innerText = <string>recordSet.records[recordId].getValue(column.name);
-						span.appendChild(hyperlink);
-						recordDiv.appendChild(span);
-					}
-					else if (column.displayName.toLowerCase().includes("date")) {
-						var span = <HTMLSpanElement>document.createElement("span");
-						span.className = "element " + this.sanitizeNameToCss(column.displayName);
-						if (recordSet.records[recordId].getValue(column.name) != null)
-							span.innerText = moment(<string>recordSet.records[recordId].getValue(column.name), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("YYYY-MM-DD");
-						recordDiv.appendChild(span);
-					}
-					else if (column.displayName.toLowerCase().includes("project")) {
-						var span = <HTMLSpanElement>document.createElement("span");
-						span.className = "element " + this.sanitizeNameToCss(column.displayName);
-
-						var hyperlink = document.createElement("a");
-						hyperlink.href = "https://fp02.crm6.dynamics.com/";
-						hyperlink.className = "prioritizer-hyperlink";
-						hyperlink.innerText = (<ComponentFramework.EntityReference>recordSet.records[recordId].getValue(column.name)).name;
-						span.appendChild(hyperlink);
-						recordDiv.appendChild(span);
+					if (column.displayName.toLowerCase().includes("date") && recordSet.records[recordId].getValue(column.name) != null) {
+						span.innerText = moment(<string>recordSet.records[recordId].getValue(column.name), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("YYYY-MM-DD");
 					}
 					else {
-						var span = <HTMLSpanElement>document.createElement("span");
-						span.className = "element " + this.sanitizeNameToCss(column.displayName);
 						span.innerText = <string>recordSet.records[recordId].getValue(column.name);
-						recordDiv.appendChild(span);
 					}
+
+					recordDiv.appendChild(span);
+
+					//TODO add hyperlinks
+					//else if (column.displayName == "Subject") {
+					// 	var span = <HTMLSpanElement>document.createElement("span");
+					// 	span.className = "element " + this.sanitizeNameToCss(column.displayName);;
+
+					// 	var hyperlink = document.createElement("a");
+					// 	hyperlink.href = "https://test.crm6.dynamics.com/";
+					// 	hyperlink.className = "prioritizer-hyperlink";
+					// 	hyperlink.innerText = <string>recordSet.records[recordId].getValue(column.name);
+					// 	span.appendChild(hyperlink);
+					// 	recordDiv.appendChild(span);
+					// }
+
+
 
 				});
 				this._container.appendChild(recordDiv);
 			});
 
-			let uniqueTags = allTags.filter(
-				(thing, i, arr) => arr.findIndex(t => t === thing) === i && thing !== ""
-			);
-
 			this._select.innerHTML = '';
-
-			uniqueTags.forEach(tag => {
-				var tagSpan = <HTMLSpanElement>document.createElement("span");
-				tagSpan.className = "selectable-tag unselected " + tag.toLowerCase().replace(' ', '-');
-				tagSpan.innerText = tag;
-
-				tagSpan.addEventListener("click", (e: Event) => {
-					let clickedElement = <HTMLSpanElement>e.srcElement;
-					clickedElement.classList.contains('unselected') ? clickedElement.classList.remove('unselected') : clickedElement.classList.add('unselected');
-					clickedElement.classList.contains('unselected') ? this._selectedTags.splice(this._selectedTags.indexOf(clickedElement.innerText), 1) : this._selectedTags.push(clickedElement.innerText);
-					this.filterList();
-				});
-
-				this._select.appendChild(tagSpan);
-			});
 
 			(<any>$('.sortable')).sortable({
 				items: 'div[class!=header]',
@@ -210,37 +155,6 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 			});
 			(<any>$('.sortable')).disableSelection();
 		}
-	}
-
-	private filterList(): void {
-
-		if (this._selectedTags.length === 0) {
-			Array.from(this._container.children).forEach(element => {
-				if (element.className === 'header')
-					return;
-
-				(<HTMLDivElement>element).style.removeProperty("display");
-			});
-			return;
-		}
-		Array.from(this._container.children).forEach(element => {
-
-			if (element.className === 'header')
-				return;
-
-			let tagFound = false;
-			this._selectedTags.forEach(tag => {
-				let sanitizedTag = tag.toLowerCase().replace(' ', '-');
-
-				if (tagFound || element.getElementsByClassName(sanitizedTag).length > 0) {
-					(<HTMLDivElement>element).style.removeProperty("display");
-					tagFound = true;
-					return;
-				}
-			});
-			if (!tagFound)
-				(<HTMLDivElement>element).style.display = 'none';
-		});
 	}
 
 	/** 

@@ -33,14 +33,6 @@ a.prioritizer-hyperlink, a.prioritizer-hyperlink:visited{
     cursor: grabbing;
 }
 
-/* .row:nth-child(even) {
-    background: #EEE;
-}
-
-.row:nth-child(odd) {
-    background: white;
-} */
-
 .element {
     padding: 5px;
     display: table-cell;
@@ -52,50 +44,12 @@ a.prioritizer-hyperlink, a.prioritizer-hyperlink:visited{
     width: 100%;
 }
 
-.selectable-tags {
-    margin: 10px;
-    margin-right: 30px;
-    float: right;
-}
-
-.tags {
-    margin-top: 10px;
-    display: table-cell;
-}
-
-.selectable-tag, .tag {
-    color: white;
-    padding: 2px;
-    border-radius: 5px;
-    margin: 5px;
-}
-
 .selectable-tag {
     cursor: pointer;
 }
 
 .sort {
     cursor: pointer;
-}
-
-.urgent {
-    background-color: #E51400;
-}
-
-.blocked {
-    background-color: #FF9642;
-}
-
-.green {
-    background-color: #668D3C;
-}
-
-.stage-gate {
-    background-color: #007996;
-}
-
-.unselected {
-    background-color: darkgray;
 }
 
 .priority {
@@ -108,8 +62,4 @@ a.prioritizer-hyperlink, a.prioritizer-hyperlink:visited{
 
 .description {
     width: 500px;
-}
-
-.tags {
-    width: 300px;
 }
