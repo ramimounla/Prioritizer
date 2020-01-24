@@ -3,9 +3,13 @@
 A tabled record viewer that allows for priority ordering using drag and drop capabilities.
 The viewer is also capable of displays tags and to filter on them.
 
+# Screenshots
+![PCF sub grid with drag and drop prioritization and tag filtering](https://github.com/ramimounla/Prioritizer/blob/master/Screenshot/Prioritizer.png?raw=true)
+
 # Instructions
-1. Clone the repository.
-2. run ```npm install``` to resolve all dependencies.
-3. run ```npm run build``` to build the project.
-4. run ```npm start``` to test the project locally.
-5. (Optional) Sample data located in the ```sample data``` folder can be loaded for better visualisation.
+Clone the respository then run the following commands
+```
+PM> npm install
+PM> npm run build
+PM> npm start
+```
