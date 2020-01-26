@@ -10,6 +10,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 	private _container: HTMLDivElement;
 	private _select: HTMLDivElement;
 	private _notifyOutputChanged: () => void;
+	private _counter: Number;
 
 	// private _selectedTags: string[] = [];
 
@@ -55,7 +56,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 		// this._container.id = "sortable";
 
 		container.appendChild(this._container);
-
+		this._counter = 1;
 		this._notifyOutputChanged();
 	}
 
@@ -96,8 +97,6 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 					//Add new ones
 					reOrderedDivs.forEach(element => { this._container.appendChild(element) });
 				});
-
-
 
 				span.innerText = column.displayName;
 				headers.appendChild(span);
@@ -143,15 +142,16 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 			this._select.innerHTML = '';
 
+			
 			(<any>$('.sortable')).sortable({
 				items: 'div[class!=header]',
-				stop: function (event: Event, ui: Object) {
+				stop:  (event: Event, ui: Object)  => {
 					let order = 1;
 					Array.from((<HTMLDivElement>event.target).children).forEach(element => {
-
+			
 						if (element.classList.contains('header'))
 							return;
-
+			
 						(<HTMLSpanElement>element.firstChild).innerText = (order++).toString();
 					});
 					this._notifyOutputChanged();
