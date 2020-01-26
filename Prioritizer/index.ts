@@ -9,6 +9,8 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 	private _container: HTMLDivElement;
 	private _select: HTMLDivElement;
+	private _notifyOutputChanged: () => void;
+
 	// private _selectedTags: string[] = [];
 
 	// // Cached context object for the latest updateView
@@ -43,6 +45,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 		this._select = document.createElement("div");
 		this._select.id = "select";
 		this._select.className = "selectable-tags";
+		this._notifyOutputChanged = notifyOutputChanged;
 		container.appendChild(this._select);
 
 		// Add control initialization code
@@ -52,6 +55,8 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 		// this._container.id = "sortable";
 
 		container.appendChild(this._container);
+
+		this._notifyOutputChanged();
 	}
 
 	private sanitizeNameToCss(name: string): string {
@@ -142,7 +147,6 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 				items: 'div[class!=header]',
 				stop: function (event: Event, ui: Object) {
 					let order = 1;
-
 					Array.from((<HTMLDivElement>event.target).children).forEach(element => {
 
 						if (element.classList.contains('header'))
@@ -150,7 +154,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 						(<HTMLSpanElement>element.firstChild).innerText = (order++).toString();
 					});
-
+					this._notifyOutputChanged();
 				}
 			});
 			(<any>$('.sortable')).disableSelection();
