@@ -57,7 +57,6 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 		container.appendChild(this._container);
 		this._counter = 1;
-		this._notifyOutputChanged();
 	}
 
 	private sanitizeNameToCss(name: string): string {
