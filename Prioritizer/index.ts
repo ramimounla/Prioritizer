@@ -12,6 +12,8 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 	private _notifyOutputChanged: () => void;
 	private _counter: Number;
 	private _dataset: DataSet;
+	private _priorityColumn: string;
+
 
 	// private _selectedTags: string[] = [];
 
@@ -55,6 +57,8 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 		this._container.className = "table-like sortable";
 		this._container.innerText = "Sample";
 		// this._container.id = "sortable";
+
+		this._priorityColumn = context.parameters.priorityColumn.raw || "";
 
 		container.appendChild(this._container);
 		this._counter = 1;
@@ -158,6 +162,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 						this._dataset.records[(<HTMLDivElement>element).id].getRecordId;
 
+						//TODO use this._priorityColumn instead of first column
 						(<HTMLSpanElement>element.firstChild).innerText = (order++).toString();
 					});
 					this._notifyOutputChanged();

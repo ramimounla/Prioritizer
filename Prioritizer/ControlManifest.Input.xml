@@ -8,7 +8,7 @@
       <property-set name="samplePropertySet" display-name-key="Property_Display_Key" description-key="Property_Desc_Key" of-type="SingleLine.Text" usage="bound" required="true" />
       -->
     </data-set>
-    <property name="optionalInput" display-name-key="Optional Input" description-key="Options Input String Variable" of-type="SingleLine.Text" usage="input" required="false" />
+    <property name="priorityColumn" display-name-key="Priority Column" description-key="Column that defines the order in which the data set will be (re)sorted." of-type="SingleLine.Text" usage="input" required="false" />
     <resources>
       <code path="index.ts" order="1"/>
       <css path="css/style.css" order="1" />
