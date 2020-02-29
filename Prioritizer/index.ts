@@ -13,7 +13,8 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 	private _counter: Number;
 	private _dataset: DataSet;
 	private _priorityColumn: string;
-
+	private _webAPI: ComponentFramework.WebApi;
+	private _entityName: string;
 
 	// private _selectedTags: string[] = [];
 
@@ -60,6 +61,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 		this._priorityColumn = context.parameters.priorityColumn.raw || "";
 
+		this._webAPI = context.webAPI;
 		container.appendChild(this._container);
 		this._counter = 1;
 	}
@@ -113,7 +115,11 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 			recordSet.sortedRecordIds.forEach(recordId => {
 				var recordDiv = <HTMLDivElement>document.createElement("div");
 				recordDiv.className = "row";
-				recordDiv.id = recordId;
+				recordDiv.id = recordSet.records[recordId].getNamedReference().id.toString();
+				
+				//TODO check this value
+				this._entityName = recordSet.records[recordId].getNamedReference().name;
+
 				context.parameters.recordSet.columns.forEach(column => {
 
 					var span = <HTMLSpanElement>document.createElement("span");
@@ -150,20 +156,29 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 			this._select.innerHTML = '';
 
-			
+
 			(<any>$('.sortable')).sortable({
 				items: 'div[class!=header]',
-				stop:  (event: Event, ui: Object)  => {
+				stop: (event: Event, ui: Object) => {
 					let order = 1;
 					Array.from((<HTMLDivElement>event.target).children).forEach(element => {
-			
+
 						if (element.classList.contains('header'))
 							return;
 
-						this._dataset.records[(<HTMLDivElement>element).id].getRecordId;
+						// var shownVal = (<HTMLInputElement>document.getElementById("query")).value;
+						// var value2send = (<HTMLInputElement>document.querySelector("#anrede option[value='" + shownVal + "']")).dataset.value;
 
 						//TODO use this._priorityColumn instead of first column
-						(<HTMLSpanElement>element.firstChild).innerText = (order++).toString();
+						(<HTMLSpanElement>element.firstChild).innerText = (order).toString();
+						var data =
+						{
+							[this._priorityColumn]: order
+						};
+
+						this._webAPI.updateRecord(this._entityName,(<HTMLDivElement>element).id, data);
+						order++;
+
 					});
 					this._notifyOutputChanged();
 				}
