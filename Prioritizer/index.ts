@@ -11,6 +11,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 	private _select: HTMLDivElement;
 	private _notifyOutputChanged: () => void;
 	private _counter: Number;
+	private _dataset: DataSet;
 
 	// private _selectedTags: string[] = [];
 
@@ -74,6 +75,8 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 			this._container.innerHTML = "";
 			var recordSet = context.parameters.recordSet;
+			this._dataset = context.parameters.recordSet;
+
 			let allTags: string[] = [];
 
 			var headers = <HTMLDivElement>document.createElement("div");
@@ -106,13 +109,15 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 			recordSet.sortedRecordIds.forEach(recordId => {
 				var recordDiv = <HTMLDivElement>document.createElement("div");
 				recordDiv.className = "row";
+				recordDiv.id = recordId;
 				context.parameters.recordSet.columns.forEach(column => {
 
 					var span = <HTMLSpanElement>document.createElement("span");
 					span.className = "element " + this.sanitizeNameToCss(column.displayName);
 
 					if (column.displayName.toLowerCase().includes("date") && recordSet.records[recordId].getValue(column.name) != null) {
-						span.innerText = moment(<string>recordSet.records[recordId].getValue(column.name), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("YYYY-MM-DD");
+						span.innerText = recordSet.records[recordId].getFormattedValue(column.name);
+						// span.innerText = moment(<string>recordSet.records[recordId].getValue(column.name), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("YYYY-MM-DD");
 					}
 					else {
 						span.innerText = <string>recordSet.records[recordId].getValue(column.name);
@@ -150,7 +155,9 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 			
 						if (element.classList.contains('header'))
 							return;
-			
+
+						this._dataset.records[(<HTMLDivElement>element).id].getRecordId;
+
 						(<HTMLSpanElement>element.firstChild).innerText = (order++).toString();
 					});
 					this._notifyOutputChanged();
@@ -165,7 +172,9 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 	 * @returns an object based on nomenclature defined in manifest, expecting object[s] for property marked as “bound” or “output”
 	 */
 	public getOutputs(): IOutputs {
-		return {};
+		return {
+			recordSet: this._dataset
+		};
 	}
 
 	/** 
