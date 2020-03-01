@@ -116,7 +116,7 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 				var recordDiv = <HTMLDivElement>document.createElement("div");
 				recordDiv.className = "row";
 				recordDiv.id = recordSet.records[recordId].getNamedReference().id.toString();
-				
+
 				//TODO check this value
 				this._entityName = recordSet.records[recordId].getNamedReference().name;
 
@@ -171,12 +171,15 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 
 						//TODO use this._priorityColumn instead of first column
 						(<HTMLSpanElement>element.firstChild).innerText = (order).toString();
-						var data =
-						{
-							[this._priorityColumn]: order
-						};
 
-						this._webAPI.updateRecord(this._entityName,(<HTMLDivElement>element).id, data);
+						if (this._webAPI.updateRecord != null) {
+							var data =
+							{
+								[this._priorityColumn]: order
+							};
+
+							this._webAPI.updateRecord(this._entityName, (<HTMLDivElement>element).id, data);
+						}
 						order++;
 
 					});
