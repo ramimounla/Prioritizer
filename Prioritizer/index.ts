@@ -129,6 +129,14 @@ export class Prioritizer implements ComponentFramework.StandardControl<IInputs, 
 						span.innerText = recordSet.records[recordId].getFormattedValue(column.name);
 						// span.innerText = moment(<string>recordSet.records[recordId].getValue(column.name), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("YYYY-MM-DD");
 					}
+					else if (column.dataType === "Lookup.Simple" && recordSet.records[recordId].getValue(column.name) !== null ){
+						var hyperLink = <HTMLAnchorElement>document.createElement("a");
+						//@ts-ignore
+						hyperLink.href = Xrm.Utility.getGlobalContext().getClientUrl() + "?appid=" + Xrm.Utility.getGlobalContext().getClientUrl() + "&pagetype=entityrecord&etn=" + recordSet.records[recordId].getValue(column.name).etn + "&id=" + context.parameters.recordSet.records[recordId].getValue(column.name).id.guid;
+						//@ts-ignore
+						hyperLink.innerText = recordSet.records[recordId].getValue(column.name).name; 
+						span.appendChild(hyperLink);
+					}
 					else {
 						span.innerText = <string>recordSet.records[recordId].getValue(column.name);
 					}
